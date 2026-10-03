@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const c = require('../controllers/publicController');
+const chat = require('../controllers/chatController');
+router.get('/certificate-types', c.getCertificateTypes);
+router.get('/certificate-types/:id', c.getCertificateTypeDetail);
+router.get('/announcements', c.getAnnouncements);
+router.get('/faqs', c.getFAQs);
+router.get('/stats', c.getStats);
+router.get('/departments', c.getDepartments);
+router.get('/states', c.getStates);
+router.get('/states/:stateId/districts', c.getDistrictsByState);
+router.get('/districts/:districtId/taluks', c.getTaluksByDistrict);
+router.get('/verify-certificate/:query', c.verifyCertificate);
+router.post('/chat', chat.chat);
+module.exports = router;

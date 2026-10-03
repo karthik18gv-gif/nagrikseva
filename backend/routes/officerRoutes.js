@@ -1,0 +1,23 @@
+const router = require('express').Router();
+const staff = require('../controllers/auth/staffAuth');
+const off   = require('../controllers/officer/officerController');
+const notif = require('../controllers/notificationController');
+const reports = require('../controllers/reportsController');
+const { verifyToken, authorize } = require('../middlewares/auth');
+const O = [verifyToken, authorize('officer')];
+
+router.post('/login', staff.officerLogin);
+router.get('/profile', ...O, staff.getStaffProfile('officers'));
+router.get('/dashboard', ...O, off.getDashboard);
+router.get('/applications/pending', ...O, off.getPendingApplications);
+router.get('/applications/:id', ...O, off.getApplicationDetail);
+router.put('/applications/:id/approve', ...O, off.approveApplication);
+router.put('/applications/:id/reject', ...O, off.rejectApplication);
+router.get('/pension', ...O, off.getPensionApplications);
+router.put('/pension/:id/approve', ...O, off.approvePension);
+router.put('/pension/:id/reject', ...O, off.rejectPension);
+router.get('/reports', ...O, reports.officerReports);
+router.get('/notifications', ...O, notif.getNotifications);
+router.put('/notifications/read-all', ...O, notif.markAllAsRead);
+router.put('/notifications/:id/read', ...O, notif.markAsRead);
+module.exports = router;

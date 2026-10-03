@@ -1,0 +1,24 @@
+const router = require('express').Router();
+const staff = require('../controllers/auth/staffAuth');
+const emp   = require('../controllers/employee/employeeController');
+const notif = require('../controllers/notificationController');
+const reports = require('../controllers/reportsController');
+const { verifyToken, authorize } = require('../middlewares/auth');
+const E = [verifyToken, authorize('employee')];
+
+router.post('/login', staff.employeeLogin);
+router.get('/profile', ...E, staff.getStaffProfile('employees'));
+router.get('/dashboard', ...E, emp.getDashboard);
+router.get('/reports', ...E, reports.employeeReports);
+router.get('/applications', ...E, emp.getAssignedApplications);
+router.get('/applications/:id', ...E, emp.getApplicationDetail);
+router.put('/applications/:id/verify', ...E, emp.verifyApplication);
+router.put('/applications/:id/return', ...E, emp.returnApplication);
+router.put('/applications/:id/reject', ...E, emp.rejectApplication);
+router.get('/pension', ...E, emp.getPensionApplications);
+router.post('/pension', ...E, emp.applyForPension);
+router.get('/pension/:id/download-letter', ...E, emp.downloadPensionLetter);
+router.get('/notifications', ...E, notif.getNotifications);
+router.put('/notifications/read-all', ...E, notif.markAllAsRead);
+router.put('/notifications/:id/read', ...E, notif.markAsRead);
+module.exports = router;
